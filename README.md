@@ -15,6 +15,5 @@ yarn init -y
 # build 命令
 
 ```
-yarn build
-注：window上cmd无法执行rm -rf dist
+parcel build src/index.html --no-minify --public-url ./
 ```
