@@ -11384,7 +11384,27 @@ $square.on('click', function () {
   // $square.addClass('active')
   $square.toggleClass('active'); //没有class就加上，有就去掉
 });
-},{"./app3.css":"app3.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"main.js":[function(require,module,exports) {
+},{"./app3.css":"app3.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app4.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"app4.js":[function(require,module,exports) {
+"use strict";
+
+require("./app4.css");
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var $circle = (0, _jquery.default)('#app4 .circle');
+$circle.on('mouseenter', function () {
+  $circle.addClass('active');
+}).on('mouseleave', function () {
+  $circle.removeClass('active');
+});
+},{"./app4.css":"app4.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 require("./reset.css");
@@ -11396,7 +11416,9 @@ require("./app1.js");
 require("./app2.js");
 
 require("./app3.js");
-},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+require("./app4.js");
+},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
