@@ -11297,6 +11297,8 @@ return jQuery;
 },{"process":"D:/nodejs/yarn_global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
+require("./app1.css");
+
 var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -11332,13 +11334,15 @@ $button4.on('click', function () {
   localStorage.setItem('n', n);
   $number.text(n);
 });
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
+},{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
 },{"_css_loader":"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
 "use strict";
+
+require("./app2.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
@@ -11361,21 +11365,38 @@ $tabBar.on('click', 'li', function (e) {
 }); // 默认值（0）时自动触发点击事件
 
 $tabBar.children().eq(0).trigger('click');
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"main.js":[function(require,module,exports) {
+},{"./app2.css":"app2.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app3.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"app3.js":[function(require,module,exports) {
+"use strict";
+
+require("./app3.css");
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var $square = (0, _jquery.default)('#app3 .square');
+$square.on('click', function () {
+  // $square.addClass('active')
+  $square.toggleClass('active'); //没有class就加上，有就去掉
+});
+},{"./app3.css":"app3.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 require("./reset.css");
 
 require("./global.css");
 
-require("./app1.css");
-
 require("./app1.js");
 
-require("./app2.css");
-
 require("./app2.js");
-},{"./reset.css":"reset.css","./global.css":"global.css","./app1.css":"app1.css","./app1.js":"app1.js","./app2.css":"app2.css","./app2.js":"app2.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+require("./app3.js");
+},{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -11403,7 +11424,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61759" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "26870" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

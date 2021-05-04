@@ -27,16 +27,15 @@ body > .page {
 body > .page > section {
     width: 50vw;
     height: 50vh;
+    border: 1px solid grey;
 }
 #app1{
-    border: 1px solid red;
 }
 
 
 
 
 #app2 {
-    border: 1px solid blue;
 }
 
 #app2 .tab-bar {
@@ -63,6 +62,22 @@ body > .page > section {
 
 #app2 .tab-content >li.active{
     display: block;
+}
+#app3{
+
+}
+
+#app3 .square{
+    border: 1px solid grey;
+    margin-top: 10vw;
+    margin-left: 10vw;
+    width: 10vw;
+    height: 10vw;
+    transition: transform 1s;
+}
+
+#app3 .square.active{
+    transform: translateX(15vw);
 }
 
 /*# sourceMappingURL=/main.1f19ae8e.css.map */
