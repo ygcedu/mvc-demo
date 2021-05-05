@@ -11320,17 +11320,15 @@ var v = {
   el: null,
   html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </div>\n    ",
   init: function init(container) {
-    v.container = (0, _jquery.default)(container);
+    v.el = (0, _jquery.default)(container);
     v.render();
   },
-  render: function render() {
-    if (v.el === null) {
-      v.el = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo(v.container);
-    } else {
-      var newEl = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n));
-      v.el.replaceWith(newEl);
-      v.el = newEl;
+  render: function render(n) {
+    if (v.el.children.length !== 0) {
+      v.el.empty();
     }
+
+    (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo(v.el);
   },
   update: function update() {
     // 将数据渲染到页面
@@ -11341,33 +11339,27 @@ var v = {
 var c = {
   init: function init(container) {
     v.init(container);
-    c.ui = {
-      // 寻找重要的元素
-      button1: (0, _jquery.default)("#add1"),
-      button2: (0, _jquery.default)("#minus1"),
-      button3: (0, _jquery.default)("#mul2"),
-      button4: (0, _jquery.default)("#divide2"),
-      number: (0, _jquery.default)('#number')
-    };
+    v.render(m.data.n); // view = render(data)
+
     c.bindEvents();
   },
   bindEvents: function bindEvents() {
     // 绑定鼠标事件
-    v.container.on('click', '#add1', function () {
+    v.el.on('click', '#add1', function () {
       m.data.n += 1;
-      v.render();
+      v.render(m.data.n);
     });
-    v.container.on('click', '#minus1', function () {
+    v.el.on('click', '#minus1', function () {
       m.data.n -= 1;
-      v.render();
+      v.render(m.data.n);
     });
-    v.container.on('click', '#mul2', function () {
+    v.el.on('click', '#mul2', function () {
       m.data.n *= 2;
-      v.render();
+      v.render(m.data.n);
     });
-    v.container.on('click', '#divide2', function () {
+    v.el.on('click', '#divide2', function () {
       m.data.n /= 2;
-      v.render();
+      v.render(m.data.n);
     });
   }
 };
