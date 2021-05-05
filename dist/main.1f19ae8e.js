@@ -11323,6 +11323,7 @@ var m = {
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
+    localStorage.setItem('n', m.data.n);
   },
   get: function get() {}
 }; // 视图相关都放到v中
