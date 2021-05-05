@@ -11308,12 +11308,23 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// 数据相关都放到m中
+var eventBus = (0, _jquery.default)(window); //使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
+
+console.log(eventBus.on);
+console.log(eventBus.trigger); // 数据相关都放到m中
+
 var m = {
   data: {
     // 初始化数据
     n: parseInt(localStorage.getItem('n'))
-  }
+  },
+  create: function create() {},
+  delete: function _delete() {},
+  update: function update(data) {
+    Object.assign(m.data, data);
+    eventBus.trigger('m:updated');
+  },
+  get: function get() {}
 }; // 视图相关都放到v中
 
 var v = {
@@ -11342,6 +11353,9 @@ var c = {
     v.render(m.data.n); // view = render(data)
 
     c.autoBindEvents();
+    eventBus.on('m:updated', function () {
+      v.render(m.data.n);
+    });
   },
   events: {
     'click #add1': 'add',
@@ -11350,16 +11364,24 @@ var c = {
     'click #divide2': 'div'
   },
   add: function add() {
-    m.data.n += 1;
+    m.update({
+      n: m.data.n + 1
+    });
   },
   minus: function minus() {
-    m.data.n -= 1;
+    m.update({
+      n: m.data.n - 1
+    });
   },
   mul: function mul() {
-    m.data.n *= 2;
+    m.update({
+      n: m.data.n * 2
+    });
   },
   div: function div() {
-    m.data.n /= 2;
+    m.update({
+      n: m.data.n / 2
+    });
   },
   autoBindEvents: function autoBindEvents() {
     for (var key in c.events) {
