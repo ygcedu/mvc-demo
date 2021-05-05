@@ -11323,13 +11323,16 @@ var v = {
 }; // 其他的都放到c中
 
 var c = {
-  ui: {
-    // 寻找重要的元素
-    button1: (0, _jquery.default)("#add1"),
-    button2: (0, _jquery.default)("#minus1"),
-    button3: (0, _jquery.default)("#mul2"),
-    button4: (0, _jquery.default)("#divide2"),
-    number: (0, _jquery.default)('#number')
+  init: function init() {
+    c.ui = {
+      // 寻找重要的元素
+      button1: (0, _jquery.default)("#add1"),
+      button2: (0, _jquery.default)("#minus1"),
+      button3: (0, _jquery.default)("#mul2"),
+      button4: (0, _jquery.default)("#divide2"),
+      number: (0, _jquery.default)('#number')
+    };
+    c.bindEvents();
   },
   bindEvents: function bindEvents() {
     console.log('bindEvents 执行了');
@@ -11363,7 +11366,7 @@ var c = {
 }; // 第一次渲染html
 
 v.render();
-c.bindEvents();
+c.init();
 },{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 

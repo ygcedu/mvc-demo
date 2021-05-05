@@ -34,13 +34,16 @@ const v = {
 }
 // 其他的都放到c中
 const c = {
-    ui: {
-        // 寻找重要的元素
-        button1: $("#add1"),
-        button2: $("#minus1"),
-        button3: $("#mul2"),
-        button4: $("#divide2"),
-        number: $('#number')
+    init() {
+        c.ui = {
+            // 寻找重要的元素
+            button1: $("#add1"),
+            button2: $("#minus1"),
+            button3: $("#mul2"),
+            button4: $("#divide2"),
+            number: $('#number')
+        }
+        c.bindEvents()
     },
     bindEvents() {
         console.log('bindEvents 执行了');
@@ -78,4 +81,4 @@ const c = {
 
 // 第一次渲染html
 v.render()
-c.bindEvents()
+c.init()
