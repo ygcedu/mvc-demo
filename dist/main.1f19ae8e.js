@@ -11341,27 +11341,58 @@ var c = {
     v.init(container);
     v.render(m.data.n); // view = render(data)
 
-    c.bindEvents();
+    c.autoBindEvents();
   },
-  bindEvents: function bindEvents() {
-    // 绑定鼠标事件
-    v.el.on('click', '#add1', function () {
-      m.data.n += 1;
-      v.render(m.data.n);
-    });
-    v.el.on('click', '#minus1', function () {
-      m.data.n -= 1;
-      v.render(m.data.n);
-    });
-    v.el.on('click', '#mul2', function () {
-      m.data.n *= 2;
-      v.render(m.data.n);
-    });
-    v.el.on('click', '#divide2', function () {
-      m.data.n /= 2;
-      v.render(m.data.n);
-    });
-  }
+  events: {
+    'click #add1': 'add',
+    'click #minus1': 'minus',
+    'click #mul2': 'mul',
+    'click #divide2': 'div'
+  },
+  add: function add() {
+    m.data.n += 1;
+  },
+  minus: function minus() {
+    m.data.n -= 1;
+  },
+  mul: function mul() {
+    m.data.n *= 2;
+  },
+  div: function div() {
+    m.data.n /= 2;
+  },
+  autoBindEvents: function autoBindEvents() {
+    for (var key in c.events) {
+      var value = c[c.events[key]];
+      var spaceIndex = key.indexOf(' ');
+      var part1 = key.slice(0, spaceIndex);
+      var part2 = key.slice(spaceIndex);
+      console.log(part1, ',', part2, value);
+      v.el.on(part1, part2, value);
+    }
+  } // bindEvents() {
+  //     // 绑定鼠标事件
+  //     v.el.on('click', '#add1', () => {
+  //         m.data.n += 1;
+  //         v.render(m.data.n)
+  //     });
+  //
+  //     v.el.on('click', '#minus1', () => {
+  //         m.data.n -= 1;
+  //         v.render(m.data.n)
+  //     });
+  //
+  //     v.el.on('click', '#mul2', () => {
+  //         m.data.n *= 2;
+  //         v.render(m.data.n)
+  //     });
+  //
+  //     v.el.on('click', '#divide2', () => {
+  //         m.data.n /= 2;
+  //         v.render(m.data.n)
+  //     });
+  // }
+
 };
 var _default = c;
 exports.default = _default;

@@ -45,30 +45,58 @@ const c = {
     init(container) {
         v.init(container)
         v.render(m.data.n)// view = render(data)
-        c.bindEvents()
+        c.autoBindEvents()
     },
-    bindEvents() {
-        // 绑定鼠标事件
-        v.el.on('click', '#add1', () => {
-            m.data.n += 1;
-            v.render(m.data.n)
-        });
-
-        v.el.on('click', '#minus1', () => {
-            m.data.n -= 1;
-            v.render(m.data.n)
-        });
-
-        v.el.on('click', '#mul2', () => {
-            m.data.n *= 2;
-            v.render(m.data.n)
-        });
-
-        v.el.on('click', '#divide2', () => {
-            m.data.n /= 2;
-            v.render(m.data.n)
-        });
+    events: {
+        'click #add1': 'add',
+        'click #minus1': 'minus',
+        'click #mul2': 'mul',
+        'click #divide2': 'div',
+    },
+    add() {
+        m.data.n += 1;
+    },
+    minus() {
+        m.data.n -= 1;
+    },
+    mul() {
+        m.data.n *= 2;
+    },
+    div() {
+        m.data.n /= 2;
+    },
+    autoBindEvents() {
+        for (let key in c.events) {
+            const value = c[c.events[key]]
+            const spaceIndex = key.indexOf(' ')
+            const part1 = key.slice(0, spaceIndex)
+            const part2 = key.slice(spaceIndex)
+            console.log(part1, ',', part2, value);
+            v.el.on(part1, part2, value)
+        }
     }
+    // bindEvents() {
+    //     // 绑定鼠标事件
+    //     v.el.on('click', '#add1', () => {
+    //         m.data.n += 1;
+    //         v.render(m.data.n)
+    //     });
+    //
+    //     v.el.on('click', '#minus1', () => {
+    //         m.data.n -= 1;
+    //         v.render(m.data.n)
+    //     });
+    //
+    //     v.el.on('click', '#mul2', () => {
+    //         m.data.n *= 2;
+    //         v.render(m.data.n)
+    //     });
+    //
+    //     v.el.on('click', '#divide2', () => {
+    //         m.data.n /= 2;
+    //         v.render(m.data.n)
+    //     });
+    // }
 }
 
 export default c
