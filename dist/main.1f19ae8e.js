@@ -11314,11 +11314,11 @@ var m = {
 var v = {
   html: "\n    <section id=\"app1\">\n        <div class=\"output\">\n            <span id=\"number\">100</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </section>\n    ",
   render: function render() {
-    var $element = (0, _jquery.default)(html).appendTo((0, _jquery.default)('body>.page'));
+    var $element = (0, _jquery.default)(v.html).appendTo((0, _jquery.default)('body>.page'));
   },
   update: function update() {
     // 将数据渲染到页面
-    $number.text(n || 100);
+    c.ui.number.text(m.data.n || 100);
   }
 }; // 其他的都放到c中
 
@@ -11331,36 +11331,39 @@ var c = {
     button4: (0, _jquery.default)("#divide2"),
     number: (0, _jquery.default)('#number')
   },
-  bindEvent: function bindEvent() {
-    // 绑定鼠标事件
-    $button1.on('click', function () {
-      var n = parseInt($number.text());
+  bindEvents: function bindEvents() {
+    console.log('bindEvents 执行了');
+    console.log(c.ui.button1); // 绑定鼠标事件
+
+    c.ui.button1.on('click', function () {
+      var n = parseInt(c.ui.number.text());
       n += 1;
       localStorage.setItem('n', n);
-      $number.text(n);
+      c.ui.number.text(n);
     });
-    $button2.on('click', function () {
-      var n = parseInt($number.text());
+    c.ui.button2.on('click', function () {
+      var n = parseInt(c.ui.number.text());
       n -= 1;
       localStorage.setItem('n', n);
-      $number.text(n);
+      c.ui.number.text(n);
     });
-    $button3.on('click', function () {
-      var n = parseInt($number.text());
+    c.ui.button3.on('click', function () {
+      var n = parseInt(c.ui.number.text());
       n *= 2;
       localStorage.setItem('n', n);
-      $number.text(n);
+      c.ui.number.text(n);
     });
-    $button4.on('click', function () {
-      var n = parseInt($number.text());
+    c.ui.button4.on('click', function () {
+      var n = parseInt(c.ui.number.text());
       n /= 2;
       localStorage.setItem('n', n);
-      $number.text(n);
+      c.ui.number.text(n);
     });
   }
 }; // 第一次渲染html
 
 v.render();
+c.bindEvents();
 },{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
@@ -11501,7 +11504,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54799" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60231" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

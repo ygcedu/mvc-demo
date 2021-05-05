@@ -25,11 +25,11 @@ const v = {
     </section>
     `,
     render() {
-        const $element = $(html).appendTo($('body>.page'))
+        const $element = $(v.html).appendTo($('body>.page'))
     },
     update() {
         // 将数据渲染到页面
-        $number.text(n || 100)
+        c.ui.number.text(m.data.n || 100)
     }
 }
 // 其他的都放到c中
@@ -42,37 +42,40 @@ const c = {
         button4: $("#divide2"),
         number: $('#number')
     },
-    bindEvent(){
+    bindEvents() {
+        console.log('bindEvents 执行了');
+        console.log(c.ui.button1);
         // 绑定鼠标事件
-        $button1.on('click', () => {
-            let n = parseInt($number.text());
+        c.ui.button1.on('click', () => {
+            let n = parseInt(c.ui.number.text());
             n += 1;
             localStorage.setItem('n', n)
-            $number.text(n);
+            c.ui.number.text(n);
         });
 
-        $button2.on('click', () => {
-            let n = parseInt($number.text());
+        c.ui.button2.on('click', () => {
+            let n = parseInt(c.ui.number.text());
             n -= 1;
             localStorage.setItem('n', n)
-            $number.text(n);
+            c.ui.number.text(n);
         });
 
-        $button3.on('click', () => {
-            let n = parseInt($number.text());
+        c.ui.button3.on('click', () => {
+            let n = parseInt(c.ui.number.text());
             n *= 2;
             localStorage.setItem('n', n)
-            $number.text(n);
+            c.ui.number.text(n);
         });
 
-        $button4.on('click', () => {
-            let n = parseInt($number.text());
+        c.ui.button4.on('click', () => {
+            let n = parseInt(c.ui.number.text());
             n /= 2;
             localStorage.setItem('n', n)
-            $number.text(n);
+            c.ui.number.text(n);
         });
     }
 }
 
 // 第一次渲染html
 v.render()
+c.bindEvents()
