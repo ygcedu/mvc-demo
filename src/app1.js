@@ -5,12 +5,13 @@ import $ from 'jquery'
 const m = {
     data: {
         // 初始化数据
-        n: localStorage.getItem('n')
+        n: parseInt(localStorage.getItem('n'))
     }
 }
 
 // 视图相关都放到v中
 const v = {
+    el: null,
     html: `
     <section id="app1">
         <div class="output">
@@ -25,7 +26,13 @@ const v = {
     </section>
     `,
     render() {
-        const $element = $(v.html.replace('{{n}}', m.data.n)).appendTo($('body>.page'))
+        if (v.el === null) {
+            v.el = $(v.html.replace('{{n}}', m.data.n)).appendTo($('body>.page'))
+        } else {
+            const newEl = $(v.html.replace('{{n}}', m.data.n))
+            v.el.replaceWith(newEl)
+            v.el = newEl
+        }
     },
     update() {
         // 将数据渲染到页面
@@ -35,6 +42,7 @@ const v = {
 // 其他的都放到c中
 const c = {
     init() {
+        v.render()
         c.ui = {
             // 寻找重要的元素
             button1: $("#add1"),
@@ -50,10 +58,8 @@ const c = {
         console.log(c.ui.button1);
         // 绑定鼠标事件
         c.ui.button1.on('click', () => {
-            let n = parseInt(c.ui.number.text());
-            n += 1;
-            localStorage.setItem('n', n)
-            c.ui.number.text(n);
+            m.data.n += 1;
+            v.render()
         });
 
         c.ui.button2.on('click', () => {
