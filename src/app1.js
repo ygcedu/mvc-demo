@@ -43,17 +43,12 @@ const v = {
     `,
     init(container) {
         v.el = $(container)
-        v.render()
     },
     render(n) {
         if (v.el.children.length !== 0) {
             v.el.empty()
         }
         $(v.html.replace('{{n}}', n)).appendTo(v.el)
-    },
-    update() {
-        // 将数据渲染到页面
-        c.ui.number.text(m.data.n || 100)
     }
 }
 // 其他的都放到c中
