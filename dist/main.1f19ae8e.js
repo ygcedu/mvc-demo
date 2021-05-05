@@ -11312,9 +11312,9 @@ var m = {
 }; // 视图相关都放到v中
 
 var v = {
-  html: "\n    <section id=\"app1\">\n        <div class=\"output\">\n            <span id=\"number\">100</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </section>\n    ",
+  html: "\n    <section id=\"app1\">\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </section>\n    ",
   render: function render() {
-    var $element = (0, _jquery.default)(v.html).appendTo((0, _jquery.default)('body>.page'));
+    var $element = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo((0, _jquery.default)('body>.page'));
   },
   update: function update() {
     // 将数据渲染到页面

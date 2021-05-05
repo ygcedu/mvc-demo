@@ -14,7 +14,7 @@ const v = {
     html: `
     <section id="app1">
         <div class="output">
-            <span id="number">100</span>
+            <span id="number">{{n}}</span>
         </div>
         <div class="actions">
             <button id="add1">+1</button>
@@ -25,7 +25,7 @@ const v = {
     </section>
     `,
     render() {
-        const $element = $(v.html).appendTo($('body>.page'))
+        const $element = $(v.html.replace('{{n}}', m.data.n)).appendTo($('body>.page'))
     },
     update() {
         // 将数据渲染到页面
