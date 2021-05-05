@@ -11297,6 +11297,11 @@ return jQuery;
 },{"process":"D:/nodejs/yarn_global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 require("./app1.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -11313,10 +11318,14 @@ var m = {
 
 var v = {
   el: null,
-  html: "\n    <section id=\"app1\">\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </section>\n    ",
+  html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </div>\n    ",
+  init: function init(container) {
+    v.container = (0, _jquery.default)(container);
+    v.render();
+  },
   render: function render() {
     if (v.el === null) {
-      v.el = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo((0, _jquery.default)('body>.page'));
+      v.el = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n)).appendTo(v.container);
     } else {
       var newEl = (0, _jquery.default)(v.html.replace('{{n}}', m.data.n));
       v.el.replaceWith(newEl);
@@ -11330,8 +11339,8 @@ var v = {
 }; // 其他的都放到c中
 
 var c = {
-  init: function init() {
-    v.render();
+  init: function init(container) {
+    v.init(container);
     c.ui = {
       // 寻找重要的元素
       button1: (0, _jquery.default)("#add1"),
@@ -11343,36 +11352,27 @@ var c = {
     c.bindEvents();
   },
   bindEvents: function bindEvents() {
-    console.log('bindEvents 执行了');
-    console.log(c.ui.button1); // 绑定鼠标事件
-
-    c.ui.button1.on('click', function () {
+    // 绑定鼠标事件
+    v.container.on('click', '#add1', function () {
       m.data.n += 1;
       v.render();
     });
-    c.ui.button2.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n -= 1;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
+    v.container.on('click', '#minus1', function () {
+      m.data.n -= 1;
+      v.render();
     });
-    c.ui.button3.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n *= 2;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
+    v.container.on('click', '#mul2', function () {
+      m.data.n *= 2;
+      v.render();
     });
-    c.ui.button4.on('click', function () {
-      var n = parseInt(c.ui.number.text());
-      n /= 2;
-      localStorage.setItem('n', n);
-      c.ui.number.text(n);
+    v.container.on('click', '#divide2', function () {
+      m.data.n /= 2;
+      v.render();
     });
   }
-}; // 第一次渲染html
-
-v.render();
-c.init();
+};
+var _default = c;
+exports.default = _default;
 },{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
@@ -11478,13 +11478,18 @@ require("./reset.css");
 
 require("./global.css");
 
-require("./app1.js");
+var _app = _interopRequireDefault(require("./app1.js"));
 
 require("./app2.js");
 
 require("./app3.js");
 
 require("./app4.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//css文件里面也可以引入其他css文件，但是性能比较低不推荐使用
+_app.default.init('#app1');
 },{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -11513,7 +11518,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60231" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "5957" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

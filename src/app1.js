@@ -13,7 +13,7 @@ const m = {
 const v = {
     el: null,
     html: `
-    <section id="app1">
+    <div>
         <div class="output">
             <span id="number">{{n}}</span>
         </div>
@@ -23,11 +23,15 @@ const v = {
             <button id="mul2">*2</button>
             <button id="divide2">÷2</button>
         </div>
-    </section>
+    </div>
     `,
+    init(container) {
+        v.container = $(container)
+        v.render()
+    },
     render() {
         if (v.el === null) {
-            v.el = $(v.html.replace('{{n}}', m.data.n)).appendTo($('body>.page'))
+            v.el = $(v.html.replace('{{n}}', m.data.n)).appendTo(v.container)
         } else {
             const newEl = $(v.html.replace('{{n}}', m.data.n))
             v.el.replaceWith(newEl)
@@ -41,8 +45,8 @@ const v = {
 }
 // 其他的都放到c中
 const c = {
-    init() {
-        v.render()
+    init(container) {
+        v.init(container)
         c.ui = {
             // 寻找重要的元素
             button1: $("#add1"),
@@ -54,37 +58,28 @@ const c = {
         c.bindEvents()
     },
     bindEvents() {
-        console.log('bindEvents 执行了');
-        console.log(c.ui.button1);
         // 绑定鼠标事件
-        c.ui.button1.on('click', () => {
+        v.container.on('click', '#add1', () => {
             m.data.n += 1;
             v.render()
         });
 
-        c.ui.button2.on('click', () => {
-            let n = parseInt(c.ui.number.text());
-            n -= 1;
-            localStorage.setItem('n', n)
-            c.ui.number.text(n);
+        v.container.on('click', '#minus1', () => {
+            m.data.n -= 1;
+            v.render()
         });
 
-        c.ui.button3.on('click', () => {
-            let n = parseInt(c.ui.number.text());
-            n *= 2;
-            localStorage.setItem('n', n)
-            c.ui.number.text(n);
+        v.container.on('click', '#mul2', () => {
+            m.data.n *= 2;
+            v.render()
         });
 
-        c.ui.button4.on('click', () => {
-            let n = parseInt(c.ui.number.text());
-            n /= 2;
-            localStorage.setItem('n', n)
-            c.ui.number.text(n);
+
+        v.container.on('click', '#divide2', () => {
+            m.data.n /= 2;
+            v.render()
         });
     }
 }
 
-// 第一次渲染html
-v.render()
-c.init()
+export default c
