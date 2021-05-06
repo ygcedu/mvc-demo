@@ -21,7 +21,7 @@ const m = new Model({
 })
 
 // 其他的都放到c中
-const c = {
+const view = {
     el: null,
     html: `
     <div>
@@ -37,22 +37,18 @@ const c = {
     </div>
     `,
     init(container) {
-        c.init(container)
-
-        c.el = $(container)
-
-
-        c.render(m.data.n)// view = render(data)
-        c.autoBindEvents()
+        view.el = $(container)
+        view.render(m.data.n)// view = render(data)
+        view.autoBindEvents()
         eventBus.on('m:updated', () => {
-            c.render(m.data.n)
+            view.render(m.data.n)
         })
     },
     render(n) {
-        if (c.el.children.length !== 0) {
-            c.el.empty()
+        if (view.el.children.length !== 0) {
+            view.el.empty()
         }
-        $(c.html.replace('{{n}}', n)).appendTo(c.el)
+        $(view.html.replace('{{n}}', n)).appendTo(view.el)
     },
     events: {
         'click #add1': 'add',
@@ -73,37 +69,15 @@ const c = {
         m.update({n: m.data.n / 2})
     },
     autoBindEvents() {
-        for (let key in c.events) {
-            const value = c[c.events[key]]
+        for (let key in view.events) {
+            const value = view[view.events[key]]
             const spaceIndex = key.indexOf(' ')
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex)
             console.log(part1, ',', part2, value);
-            c.el.on(part1, part2, value)
+            view.el.on(part1, part2, value)
         }
     }
-    // bindEvents() {
-    //     // 绑定鼠标事件
-    //     v.el.on('click', '#add1', () => {
-    //         m.data.n += 1;
-    //         v.render(m.data.n)
-    //     });
-    //
-    //     v.el.on('click', '#minus1', () => {
-    //         m.data.n -= 1;
-    //         v.render(m.data.n)
-    //     });
-    //
-    //     v.el.on('click', '#mul2', () => {
-    //         m.data.n *= 2;
-    //         v.render(m.data.n)
-    //     });
-    //
-    //     v.el.on('click', '#divide2', () => {
-    //         m.data.n /= 2;
-    //         v.render(m.data.n)
-    //     });
-    // }
 }
 
-export default c
+export default view

@@ -11356,37 +11356,7 @@ var Model = /*#__PURE__*/function () {
 
 var _default = Model;
 exports.default = _default;
-},{}],"base/View.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var View = // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
-function View(_ref) {
-  var el = _ref.el,
-      html = _ref.html,
-      render = _ref.render;
-
-  _classCallCheck(this, View);
-
-  this.el = (0, _jquery.default)(el);
-  this.html = html;
-  this.render = render;
-} // render()暂时还不能抽离成公共的，在Vue.js里面是有这个渲染函数的负责虚拟dom的渲染
-;
-
-var _default = View;
-exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app1.js":[function(require,module,exports) {
+},{}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11399,8 +11369,6 @@ require("./app1.css");
 var _jquery = _interopRequireDefault(require("jquery"));
 
 var _Model = _interopRequireDefault(require("./base/Model.js"));
-
-var _View = _interopRequireDefault(require("./base/View"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11422,30 +11390,24 @@ var m = new _Model.default({
   }
 }); // 其他的都放到c中
 
-var c = {
-  v: null,
-  initV: function initV() {
-    // 视图相关都放到v中
-    c.v = new _View.default({
-      el: c.container,
-      html: "\n            <div>\n                <div class=\"output\">\n                    <span id=\"number\">{{n}}</span>\n                </div>\n                <div class=\"actions\">\n                    <button id=\"add1\">+1</button>\n                    <button id=\"minus1\">-1</button>\n                    <button id=\"mul2\">*2</button>\n                    <button id=\"divide2\">\xF72</button>\n                </div>\n            </div>\n            ",
-      render: function render(n) {
-        if (c.v.el.children.length !== 0) {
-          c.v.el.empty();
-        }
-
-        (0, _jquery.default)(c.v.html.replace('{{n}}', n)).appendTo(c.v.el);
-      }
-    });
-    c.v.render(m.data.n); // view = render(data)
-  },
+var view = {
+  el: null,
+  html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </div>\n    ",
   init: function init(container) {
-    c.container = container;
-    c.initV();
-    c.autoBindEvents();
+    view.el = (0, _jquery.default)(container);
+    view.render(m.data.n); // view = render(data)
+
+    view.autoBindEvents();
     eventBus.on('m:updated', function () {
-      c.v.render(m.data.n);
+      view.render(m.data.n);
     });
+  },
+  render: function render(n) {
+    if (view.el.children.length !== 0) {
+      view.el.empty();
+    }
+
+    (0, _jquery.default)(view.html.replace('{{n}}', n)).appendTo(view.el);
   },
   events: {
     'click #add1': 'add',
@@ -11474,41 +11436,19 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    for (var key in c.events) {
-      var value = c[c.events[key]];
+    for (var key in view.events) {
+      var value = view[view.events[key]];
       var spaceIndex = key.indexOf(' ');
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex);
       console.log(part1, ',', part2, value);
-      c.v.el.on(part1, part2, value);
+      view.el.on(part1, part2, value);
     }
-  } // bindEvents() {
-  //     // 绑定鼠标事件
-  //     v.el.on('click', '#add1', () => {
-  //         m.data.n += 1;
-  //         v.render(m.data.n)
-  //     });
-  //
-  //     v.el.on('click', '#minus1', () => {
-  //         m.data.n -= 1;
-  //         v.render(m.data.n)
-  //     });
-  //
-  //     v.el.on('click', '#mul2', () => {
-  //         m.data.n *= 2;
-  //         v.render(m.data.n)
-  //     });
-  //
-  //     v.el.on('click', '#divide2', () => {
-  //         m.data.n /= 2;
-  //         v.render(m.data.n)
-  //     });
-  // }
-
+  }
 };
-var _default = c;
+var _default = view;
 exports.default = _default;
-},{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model.js":"base/Model.js","./base/View":"base/View.js"}],"app2.css":[function(require,module,exports) {
+},{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model.js":"base/Model.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11702,7 +11642,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41523" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50735" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
