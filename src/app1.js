@@ -1,7 +1,6 @@
 import './app1.css'
 import $ from 'jquery'
 import Model from "./base/Model.js";
-import View from "./base/View";
 
 const eventBus = $(window)//使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
 console.log(eventBus.on);
@@ -21,41 +20,40 @@ const m = new Model({
     }
 })
 
+// 视图相关都放到v中
+const v = {
+    el: null,
+    html: `
+    <div>
+        <div class="output">
+            <span id="number">{{n}}</span>
+        </div>
+        <div class="actions">
+            <button id="add1">+1</button>
+            <button id="minus1">-1</button>
+            <button id="mul2">*2</button>
+            <button id="divide2">÷2</button>
+        </div>
+    </div>
+    `,
+    init(container) {
+        v.el = $(container)
+    },
+    render(n) {
+        if (v.el.children.length !== 0) {
+            v.el.empty()
+        }
+        $(v.html.replace('{{n}}', n)).appendTo(v.el)
+    }
+}
 // 其他的都放到c中
 const c = {
-    v: null,
-    initV(){
-        // 视图相关都放到v中
-        c.v = new View({
-            el: c.container,
-            html: `
-            <div>
-                <div class="output">
-                    <span id="number">{{n}}</span>
-                </div>
-                <div class="actions">
-                    <button id="add1">+1</button>
-                    <button id="minus1">-1</button>
-                    <button id="mul2">*2</button>
-                    <button id="divide2">÷2</button>
-                </div>
-            </div>
-            `,
-            render(n) {
-                if (c.v.el.children.length !== 0) {
-                    c.v.el.empty()
-                }
-                $(c.v.html.replace('{{n}}', n)).appendTo(c.v.el)
-            }
-        })
-        c.v.render(m.data.n)// view = render(data)
-    },
     init(container) {
-        c.container = container
-        c.initV()
+        v.init(container)
+        v.render(m.data.n)// view = render(data)
         c.autoBindEvents()
         eventBus.on('m:updated', () => {
-            c.v.render(m.data.n)
+            v.render(m.data.n)
         })
     },
     events: {
@@ -83,7 +81,7 @@ const c = {
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex)
             console.log(part1, ',', part2, value);
-            c.v.el.on(part1, part2, value)
+            v.el.on(part1, part2, value)
         }
     }
     // bindEvents() {
