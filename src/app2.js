@@ -38,32 +38,14 @@ const view = {
         }
         $(view.html(index)).appendTo(view.el)
     },
-    init(container) {
-        view.el = $(container)
-        view.render(m.data.index)// view = render(data)
-        view.autoBindEvents()
-        eventBus.on('m:updated', () => {
-            view.render(m.data.index)
-        })
-    },
-    events: {
-        'click .tab-bar li': 'x'
-    },
+    // events: {
+    //     'click .tab-bar li': 'x'
+    // },
     x(e) {
         // console.log(e.currentTarget);
         const index = parseInt(e.currentTarget.dataset.index);
         m.update({index: index})
     },
-    autoBindEvents() {
-        for (let key in view.events) {
-            const value = view[view.events[key]]
-            const spaceIndex = key.indexOf(' ')
-            const part1 = key.slice(0, spaceIndex)
-            const part2 = key.slice(spaceIndex)
-            console.log(part1, ',', part2, value);
-            view.el.on(part1, part2, value)
-        }
-    }
 }
 
 export default view

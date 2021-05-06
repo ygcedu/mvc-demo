@@ -11494,34 +11494,15 @@ var view = {
 
     (0, _jquery.default)(view.html(index)).appendTo(view.el);
   },
-  init: function init(container) {
-    view.el = (0, _jquery.default)(container);
-    view.render(m.data.index); // view = render(data)
-
-    view.autoBindEvents();
-    eventBus.on('m:updated', function () {
-      view.render(m.data.index);
-    });
-  },
-  events: {
-    'click .tab-bar li': 'x'
-  },
+  // events: {
+  //     'click .tab-bar li': 'x'
+  // },
   x: function x(e) {
     // console.log(e.currentTarget);
     var index = parseInt(e.currentTarget.dataset.index);
     m.update({
       index: index
     });
-  },
-  autoBindEvents: function autoBindEvents() {
-    for (var key in view.events) {
-      var value = view[view.events[key]];
-      var spaceIndex = key.indexOf(' ');
-      var part1 = key.slice(0, spaceIndex);
-      var part2 = key.slice(spaceIndex);
-      console.log(part1, ',', part2, value);
-      view.el.on(part1, part2, value);
-    }
   }
 };
 var _default = view;
