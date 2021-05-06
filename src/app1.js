@@ -1,28 +1,23 @@
 import './app1.css'
 import $ from 'jquery'
+import Model from "./base/Model.js";
 
 const eventBus = $(window)//使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
 console.log(eventBus.on);
 console.log(eventBus.trigger);
 
 // 数据相关都放到m中
-const m = {
+const m = new Model({
     data: {
         // 初始化数据
         n: parseInt(localStorage.getItem('n'))
-    },
-    create() {
-
-    },
-    delete() {
-    },
-    update(data) {
-        Object.assign(m.data, data)
-        eventBus.trigger('m:updated')
-        localStorage.setItem('n', m.data.n)
-    },
-    get() {
     }
+})
+
+m.update = (data) => {
+    Object.assign(m.data, data)
+    eventBus.trigger('m:updated')
+    localStorage.setItem('n', m.data.n)
 }
 
 // 视图相关都放到v中
