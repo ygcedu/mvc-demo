@@ -11294,7 +11294,99 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-},{"process":"D:/nodejs/yarn_global/node_modules/process/browser.js"}],"app1.js":[function(require,module,exports) {
+},{"process":"D:/nodejs/yarn_global/node_modules/process/browser.js"}],"base/Model.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Model = /*#__PURE__*/function () {
+  function Model(options) {
+    var _this = this;
+
+    _classCallCheck(this, Model);
+
+    ['data', 'update', 'create', 'delete', 'get'].forEach(function (key) {
+      if (key in options) {
+        _this[key] = options[key];
+      }
+    }); // this.data = options.data
+    // this.update = options.update
+    // this.delete = options.delete
+    // this.get = options.get
+  }
+
+  _createClass(Model, [{
+    key: "create",
+    value: function create() {
+      console && console.error && console.error('你还没有实现 create');
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      console && console.error && console.error('你还没有实现 delete');
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      var _console, _console$error;
+
+      // 新语法
+      (_console = console) === null || _console === void 0 ? void 0 : (_console$error = _console.error) === null || _console$error === void 0 ? void 0 : _console$error.call(_console, '你还没有实现 update');
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      var _console2, _console2$error;
+
+      (_console2 = console) === null || _console2 === void 0 ? void 0 : (_console2$error = _console2.error) === null || _console2$error === void 0 ? void 0 : _console2$error.call(_console2, '你还没有实现 get');
+    }
+  }]);
+
+  return Model;
+}();
+
+var _default = Model;
+exports.default = _default;
+},{}],"base/View.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var View = // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
+function View(_ref) {
+  var el = _ref.el,
+      html = _ref.html,
+      render = _ref.render;
+
+  _classCallCheck(this, View);
+
+  this.el = (0, _jquery.default)(el);
+  this.html = html;
+  this.render = render;
+} // render()暂时还不能抽离成公共的，在Vue.js里面是有这个渲染函数的负责虚拟dom的渲染
+;
+
+var _default = View;
+exports.default = _default;
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11306,6 +11398,10 @@ require("./app1.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
+var _Model = _interopRequireDefault(require("./base/Model.js"));
+
+var _View = _interopRequireDefault(require("./base/View"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)(window); //使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
@@ -11313,44 +11409,42 @@ var eventBus = (0, _jquery.default)(window); //使用jquery，不需要选择一
 console.log(eventBus.on);
 console.log(eventBus.trigger); // 数据相关都放到m中
 
-var m = {
+var m = new _Model.default({
   data: {
     // 初始化数据
     n: parseInt(localStorage.getItem('n'))
   },
-  create: function create() {},
-  delete: function _delete() {},
+  // 这里不建议使用箭头函数，在面向对象里使用箭头函数很容易出错
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
     localStorage.setItem('n', m.data.n);
-  },
-  get: function get() {}
-}; // 视图相关都放到v中
-
-var v = {
-  el: null,
-  html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div class=\"actions\">\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </div>\n    ",
-  init: function init(container) {
-    v.el = (0, _jquery.default)(container);
-  },
-  render: function render(n) {
-    if (v.el.children.length !== 0) {
-      v.el.empty();
-    }
-
-    (0, _jquery.default)(v.html.replace('{{n}}', n)).appendTo(v.el);
   }
-}; // 其他的都放到c中
+}); // 其他的都放到c中
 
 var c = {
-  init: function init(container) {
-    v.init(container);
-    v.render(m.data.n); // view = render(data)
+  v: null,
+  initV: function initV() {
+    // 视图相关都放到v中
+    c.v = new _View.default({
+      el: c.container,
+      html: "\n            <div>\n                <div class=\"output\">\n                    <span id=\"number\">{{n}}</span>\n                </div>\n                <div class=\"actions\">\n                    <button id=\"add1\">+1</button>\n                    <button id=\"minus1\">-1</button>\n                    <button id=\"mul2\">*2</button>\n                    <button id=\"divide2\">\xF72</button>\n                </div>\n            </div>\n            ",
+      render: function render(n) {
+        if (c.v.el.children.length !== 0) {
+          c.v.el.empty();
+        }
 
+        (0, _jquery.default)(c.v.html.replace('{{n}}', n)).appendTo(c.v.el);
+      }
+    });
+    c.v.render(m.data.n); // view = render(data)
+  },
+  init: function init(container) {
+    c.container = container;
+    c.initV();
     c.autoBindEvents();
     eventBus.on('m:updated', function () {
-      v.render(m.data.n);
+      c.v.render(m.data.n);
     });
   },
   events: {
@@ -11386,7 +11480,7 @@ var c = {
       var part1 = key.slice(0, spaceIndex);
       var part2 = key.slice(spaceIndex);
       console.log(part1, ',', part2, value);
-      v.el.on(part1, part2, value);
+      c.v.el.on(part1, part2, value);
     }
   } // bindEvents() {
   //     // 绑定鼠标事件
@@ -11414,7 +11508,7 @@ var c = {
 };
 var _default = c;
 exports.default = _default;
-},{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.css":[function(require,module,exports) {
+},{"./app1.css":"app1.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model.js":"base/Model.js","./base/View":"base/View.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11431,31 +11525,30 @@ require("./app2.css");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
+var _Model = _interopRequireDefault(require("./base/Model"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)(window);
 var localKey = 'app2.index';
-var m = {
+var m = new _Model.default({
   data: {
     // 初始化数据
     index: parseInt(localStorage.getItem(localKey)) || 0
   },
-  create: function create() {},
-  delete: function _delete() {},
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
     localStorage.setItem('index', m.data.index);
-  },
-  get: function get() {}
-};
+  }
+});
 var v = {
   el: null,
   html: function html(index) {
     return "\n        <div>\n            <ol class=\"tab-bar\">\n                <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\"><span>1111</span></li>\n                <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\"><span>2222</span></li>\n            </ol>\n            <ol class=\"tab-content\">\n                <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB91</li>\n                <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB92</li>\n            </ol>\n        </div>\n    ");
   },
-  init: function init(container) {
-    v.el = (0, _jquery.default)(container); // v.render()
+  init: function init(el) {
+    v.el = (0, _jquery.default)(el); // v.render()
   },
   render: function render(index) {
     if (v.el.children.length !== 0) {
@@ -11498,7 +11591,7 @@ var c = {
 };
 var _default = c;
 exports.default = _default;
-},{"./app2.css":"app2.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"app3.css":[function(require,module,exports) {
+},{"./app2.css":"app2.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model":"base/Model.js"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11609,7 +11702,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "21587" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41523" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

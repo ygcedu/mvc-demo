@@ -5,7 +5,7 @@ class Model {
                 this[key] = options[key]
             }
         })
-        this.data = options.data
+        // this.data = options.data
         // this.update = options.update
         // this.delete = options.delete
         // this.get = options.get

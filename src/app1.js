@@ -23,10 +23,11 @@ const m = new Model({
 
 // 其他的都放到c中
 const c = {
-    init(container) {
+    v: null,
+    initV(){
         // 视图相关都放到v中
-        const v = new View({
-            el: null,
+        c.v = new View({
+            el: c.container,
             html: `
             <div>
                 <div class="output">
@@ -41,16 +42,20 @@ const c = {
             </div>
             `,
             render(n) {
-                if (v.el.children.length !== 0) {
-                    v.el.empty()
+                if (c.v.el.children.length !== 0) {
+                    c.v.el.empty()
                 }
-                $(v.html.replace('{{n}}', n)).appendTo(v.el)
+                $(c.v.html.replace('{{n}}', n)).appendTo(c.v.el)
             }
         })
-        v.render(m.data.n)// view = render(data)
+        c.v.render(m.data.n)// view = render(data)
+    },
+    init(container) {
+        c.container = container
+        c.initV()
         c.autoBindEvents()
         eventBus.on('m:updated', () => {
-            v.render(m.data.n)
+            c.v.render(m.data.n)
         })
     },
     events: {
@@ -78,7 +83,7 @@ const c = {
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex)
             console.log(part1, ',', part2, value);
-            v.el.on(part1, part2, value)
+            c.v.el.on(part1, part2, value)
         }
     }
     // bindEvents() {

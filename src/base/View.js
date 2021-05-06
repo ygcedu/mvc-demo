@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 class View {
     // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
     constructor({el, html, render}) {
