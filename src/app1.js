@@ -20,8 +20,8 @@ const m = new Model({
     }
 })
 
-// 视图相关都放到v中
-const v = {
+// 其他的都放到c中
+const c = {
     el: null,
     html: `
     <div>
@@ -37,24 +37,22 @@ const v = {
     </div>
     `,
     init(container) {
-        v.el = $(container)
-    },
-    render(n) {
-        if (v.el.children.length !== 0) {
-            v.el.empty()
-        }
-        $(v.html.replace('{{n}}', n)).appendTo(v.el)
-    }
-}
-// 其他的都放到c中
-const c = {
-    init(container) {
-        v.init(container)
-        v.render(m.data.n)// view = render(data)
+        c.init(container)
+
+        c.el = $(container)
+
+
+        c.render(m.data.n)// view = render(data)
         c.autoBindEvents()
         eventBus.on('m:updated', () => {
-            v.render(m.data.n)
+            c.render(m.data.n)
         })
+    },
+    render(n) {
+        if (c.el.children.length !== 0) {
+            c.el.empty()
+        }
+        $(c.html.replace('{{n}}', n)).appendTo(c.el)
     },
     events: {
         'click #add1': 'add',
@@ -81,7 +79,7 @@ const c = {
             const part1 = key.slice(0, spaceIndex)
             const part2 = key.slice(spaceIndex)
             console.log(part1, ',', part2, value);
-            v.el.on(part1, part2, value)
+            c.el.on(part1, part2, value)
         }
     }
     // bindEvents() {
