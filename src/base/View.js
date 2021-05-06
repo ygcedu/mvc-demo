@@ -2,17 +2,14 @@ import $ from 'jquery';
 
 class View {
     // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
-    constructor({el, html, render, data, eventBus, events}) {
-        this.el = $(el)
-        this.html = html
-        this.render = render
-        this.events = events
-        this.data = data
-        this.eventBus = eventBus
-        this.render(data)// view = render(data)
+    // constructor({el, html, render, data, eventBus, events}) {
+    constructor(options) {
+        Object.assign(this, options)// 取出options中的所有属性，然后复制到this上
+        this.el = $(this.el)
+        this.render(this.data)// view = render(data)
         this.autoBindEvents()
-        eventBus.on('m:updated', () => {
-            this.render(data)
+        this.eventBus.on('m:updated', () => {
+            this.render(this.data)
         })
     }
     autoBindEvents() {

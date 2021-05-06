@@ -1,6 +1,7 @@
 import './app2.css'
 import $ from 'jquery';
 import Model from "./base/Model";
+import View from "./base/View";
 
 const eventBus = $(window)
 const localKey = 'app2.index'
@@ -16,10 +17,13 @@ const m = new Model({
     }
 })
 
-const view = {
-    el: null,
-    html: (index) => {
-        return `
+const init = (el) => {
+    new View({
+        el: el,
+        data: m.data,
+        eventBus: eventBus,
+        html: (index) => {
+            return `
         <div>
             <ol class="tab-bar">
                 <li class="${index === 0 ? 'selected' : ''}" data-index="0"><span>1111</span></li>
@@ -31,21 +35,23 @@ const view = {
             </ol>
         </div>
     `
-    },
-    render(index) {
-        if (view.el.children.length !== 0) {
-            view.el.empty()
-        }
-        $(view.html(index)).appendTo(view.el)
-    },
-    // events: {
-    //     'click .tab-bar li': 'x'
-    // },
-    x(e) {
-        // console.log(e.currentTarget);
-        const index = parseInt(e.currentTarget.dataset.index);
-        m.update({index: index})
-    },
+        },
+        render(data) {
+            const index = data.index
+            if (this.el.children.length !== 0) {
+                this.el.empty()
+            }
+            $(this.html(index)).appendTo(this.el)
+        },
+        events: {
+            'click .tab-bar li': 'x'
+        },
+        x(e) {
+            // console.log(e.currentTarget);
+            const index = parseInt(e.currentTarget.dataset.index);
+            m.update({index: index})
+        },
+    })
 }
 
-export default view
+export default init

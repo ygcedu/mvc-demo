@@ -11453,7 +11453,64 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"app2.js":[function(require,module,exports) {
+},{"_css_loader":"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"base/View.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var View = /*#__PURE__*/function () {
+  // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
+  // constructor({el, html, render, data, eventBus, events}) {
+  function View(options) {
+    var _this = this;
+
+    _classCallCheck(this, View);
+
+    Object.assign(this, options); // 取出options中的所有属性，然后复制到this上
+
+    this.el = (0, _jquery.default)(this.el);
+    this.render(this.data); // view = render(data)
+
+    this.autoBindEvents();
+    this.eventBus.on('m:updated', function () {
+      _this.render(_this.data);
+    });
+  }
+
+  _createClass(View, [{
+    key: "autoBindEvents",
+    value: function autoBindEvents() {
+      for (var key in this.events) {
+        var value = this[this.events[key]];
+        var spaceIndex = key.indexOf(' ');
+        var part1 = key.slice(0, spaceIndex);
+        var part2 = key.slice(spaceIndex);
+        console.log(part1, ',', part2, value);
+        this.el.on(part1, part2, value);
+      }
+    } // render()暂时还不能抽离成公共的，在Vue.js里面是有这个渲染函数的负责虚拟dom的渲染
+
+  }]);
+
+  return View;
+}();
+
+var _default = View;
+exports.default = _default;
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"app2.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11466,6 +11523,8 @@ require("./app2.css");
 var _jquery = _interopRequireDefault(require("jquery"));
 
 var _Model = _interopRequireDefault(require("./base/Model"));
+
+var _View = _interopRequireDefault(require("./base/View"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11482,32 +11541,40 @@ var m = new _Model.default({
     localStorage.setItem('app2.index', m.data.index);
   }
 });
-var view = {
-  el: null,
-  html: function html(index) {
-    return "\n        <div>\n            <ol class=\"tab-bar\">\n                <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\"><span>1111</span></li>\n                <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\"><span>2222</span></li>\n            </ol>\n            <ol class=\"tab-content\">\n                <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB91</li>\n                <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB92</li>\n            </ol>\n        </div>\n    ");
-  },
-  render: function render(index) {
-    if (view.el.children.length !== 0) {
-      view.el.empty();
-    }
 
-    (0, _jquery.default)(view.html(index)).appendTo(view.el);
-  },
-  // events: {
-  //     'click .tab-bar li': 'x'
-  // },
-  x: function x(e) {
-    // console.log(e.currentTarget);
-    var index = parseInt(e.currentTarget.dataset.index);
-    m.update({
-      index: index
-    });
-  }
+var init = function init(el) {
+  new _View.default({
+    el: el,
+    data: m.data,
+    eventBus: eventBus,
+    html: function html(index) {
+      return "\n        <div>\n            <ol class=\"tab-bar\">\n                <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=\"0\"><span>1111</span></li>\n                <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=\"1\"><span>2222</span></li>\n            </ol>\n            <ol class=\"tab-content\">\n                <li class=\"").concat(index === 0 ? 'active' : '', "\">\u5185\u5BB91</li>\n                <li class=\"").concat(index === 1 ? 'active' : '', "\">\u5185\u5BB92</li>\n            </ol>\n        </div>\n    ");
+    },
+    render: function render(data) {
+      var index = data.index;
+
+      if (this.el.children.length !== 0) {
+        this.el.empty();
+      }
+
+      (0, _jquery.default)(this.html(index)).appendTo(this.el);
+    },
+    events: {
+      'click .tab-bar li': 'x'
+    },
+    x: function x(e) {
+      // console.log(e.currentTarget);
+      var index = parseInt(e.currentTarget.dataset.index);
+      m.update({
+        index: index
+      });
+    }
+  });
 };
-var _default = view;
+
+var _default = init;
 exports.default = _default;
-},{"./app2.css":"app2.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model":"base/Model.js"}],"app3.css":[function(require,module,exports) {
+},{"./app2.css":"app2.css","jquery":"../node_modules/jquery/dist/jquery.js","./base/Model":"base/Model.js","./base/View":"base/View.js"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11589,7 +11656,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //css文件里面也可以引入其他css文件，但是性能比较低不推荐使用
 _app.default.init('#app1');
 
-_app2.default.init('#app2');
+(0, _app2.default)('#app2');
 },{"./reset.css":"reset.css","./global.css":"global.css","./app1.js":"app1.js","./app2.js":"app2.js","./app3.js":"app3.js","./app4.js":"app4.js"}],"D:/nodejs/yarn_global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
