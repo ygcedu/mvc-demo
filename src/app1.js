@@ -11,14 +11,14 @@ const m = new Model({
     data: {
         // 初始化数据
         n: parseInt(localStorage.getItem('n'))
+    },
+    // 这里不建议使用箭头函数，在面向对象里使用箭头函数很容易出错
+    update: function (data) {
+        Object.assign(m.data, data)
+        eventBus.trigger('m:updated')
+        localStorage.setItem('n', m.data.n)
     }
 })
-
-m.update = (data) => {
-    Object.assign(m.data, data)
-    eventBus.trigger('m:updated')
-    localStorage.setItem('n', m.data.n)
-}
 
 // 视图相关都放到v中
 const v = {
