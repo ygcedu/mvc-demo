@@ -1,14 +1,16 @@
 import $ from 'jquery';
+import EventBus from "./EventBus";
 
-class View {
+class View extends EventBus{
     // 这里的参数需要注意一下，接受一个包含三个已知属性的对象参数
     // constructor({el, html, render, data, eventBus, events}) {
     constructor(options) {
+        super() // EventBus#constructor()
         Object.assign(this, options)// 取出options中的所有属性，然后复制到this上
         this.el = $(this.el)
         this.render(this.data)// view = render(data)
         this.autoBindEvents()
-        this.eventBus.on('m:updated', () => {
+        this.on('m:updated', () => {
             this.render(this.data)
         })
     }
