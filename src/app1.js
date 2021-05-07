@@ -2,10 +2,9 @@ import './app1.css'
 import $ from 'jquery'
 import Model from "./base/Model.js";
 import View from "./base/View";
+import EventBus from "./base/EventBus";
 
-const eventBus = $(window)//使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
-console.log(eventBus.on);
-console.log(eventBus.trigger);
+const eventBus = new EventBus()//使用jquery，不需要选择一个dom对象，所以传进去一个window对象，只需要使用jquery对象的原型方法on和trigger
 
 // 数据相关都放到m中
 const m = new Model({
