@@ -3,7 +3,8 @@ import EventBus from "./EventBus";
 class Model extends EventBus{
     constructor(options) {
         super() // EventBus#constructor()
-        ['data', 'update', 'create', 'delete', 'get'].forEach((key) => {
+        const keys = ['data', 'update', 'create', 'delete', 'get']
+        keys.forEach((key) => {
             if (key in options) {
                 this[key] = options[key]
             }

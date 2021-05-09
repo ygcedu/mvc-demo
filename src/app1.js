@@ -1,66 +1,51 @@
 import './app1.css'
-import $ from 'jquery'
-import Model from "./base/Model.js";
-import View from "./base/View";
+// import Vue from "vue"
+// 切换到vue runtime模式(参考：https://blog.csdn.net/wxl1555/article/details/83187647)
+import Vue from 'vue/dist/vue.esm.js'
 
-// 数据相关都放到m中
-const m = new Model({
-    data: {
-        // 初始化数据
-        n: parseFloat(localStorage.getItem('n'))
-    },
-    // 这里不建议使用箭头函数，在面向对象里使用箭头函数很容易出错
-    update: function (data) {
-        Object.assign(m.data, data)
-        m.trigger('m:updated')
-        localStorage.setItem('n', m.data.n)
-    }
-})
-
-// 其他的都放到c中
+// 所有代码都放到view中
 const init = (el) => {
-    const view = new View({
+    new Vue({
         el: el,
-        data: m.data,
-        eventBus: eventBus,
-        html: `
-        <div>
+        data: {n: parseFloat(localStorage.getItem('n'))},
+        methods: {
+            add() {
+                this.n += 1
+            },
+            minus() {
+                this.n -= 1
+            },
+            mul() {
+                this.n *= 2
+            },
+            div() {
+                this.n /= 2
+            },
+        },
+        watch: {
+            n() {
+                localStorage.setItem('n', this.n)
+            }
+            // n变化的时候触发后面的函数（这里不能是箭头函数）
+            // n: function() {
+            //     localStorage.setItem('n', this.n)
+            // }
+        },
+        template: `
+          <section>
+          <div>
             <div class="output">
-                <span id="number">{{n}}</span>
+              <span id="number">{{ n }}</span>
             </div>
             <div class="actions">
-                <button id="add1">+1</button>
-                <button id="minus1">-1</button>
-                <button id="mul2">*2</button>
-                <button id="divide2">÷2</button>
+              <button @click="add">+1</button>
+              <button @click="minus">-1</button>
+              <button @click="mul">*2</button>
+              <button @click="div">÷2</button>
             </div>
-        </div>
-        `,
-        render(data) {
-            const n = data.n
-            if (this.el.children.length !== 0) {
-                this.el.empty()
-            }
-            $(this.html.replace('{{n}}', n)).appendTo(this.el)
-        },
-        events: {
-            'click #add1': 'add',
-            'click #minus1': 'minus',
-            'click #mul2': 'mul',
-            'click #divide2': 'div',
-        },
-        add() {
-            m.update({n: m.data.n + 1})
-        },
-        minus() {
-            m.update({n: m.data.n - 1})
-        },
-        mul() {
-            m.update({n: m.data.n * 2})
-        },
-        div() {
-            m.update({n: m.data.n / 2})
-        }
+          </div>
+          </section>
+        `
     })
 }
 
