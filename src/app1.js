@@ -32,7 +32,7 @@ const init = (el) => {
             // }
         },
         template: `
-          <section>
+          <section id="app1">
           <div>
             <div class="output">
               <span id="number">{{ n }}</span>
